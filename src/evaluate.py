@@ -21,11 +21,16 @@ class_labels = list(val_gen.class_indices.keys())
 # Classification report
 print(classification_report(y_true, y_pred, target_names=class_labels))
 
-# Confusion matrix
+# Confusion matrix (needed to calculate per-class accuracy)
 cm = confusion_matrix(y_true, y_pred)
-plt.figure(figsize=(10,8))
-sns.heatmap(cm, annot=True, fmt='d', xticklabels=class_labels, yticklabels=class_labels, cmap='Blues')
-plt.xlabel('Predicted')
-plt.ylabel('True')
-plt.title('Confusion Matrix')
+
+# Per-class accuracy
+per_class_acc = cm.diagonal() / cm.sum(axis=1)
+
+plt.figure(figsize=(12,6))
+sns.barplot(x=class_labels, y=per_class_acc)
+plt.xticks(rotation=45)
+plt.ylabel("Accuracy")
+plt.ylim(0,1)
+plt.title("Per-Class Accuracy")
 plt.show()
